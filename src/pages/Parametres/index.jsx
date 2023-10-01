@@ -21,6 +21,8 @@ import {
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeviceTabs from "./Tabs/DeviceTabs";
+import TypeAbonnTabs from "./Tabs/TypeAbonnTabs";
+import ServicePaiementTabs from "./Tabs/ServicePaiementTabs";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -89,10 +91,10 @@ function index() {
         <DeviceTabs />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <DeviceTabs />
+        <TypeAbonnTabs />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <DeviceTabs />
+        <ServicePaiementTabs />
       </CustomTabPanel>
     </Box>
   );

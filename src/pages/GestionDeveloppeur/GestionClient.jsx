@@ -19,12 +19,13 @@ import {
   TextField,
   MenuItem,
   Box,
+  tableCellClasses,
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
 import TablePagination from "@mui/material/TablePagination";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -38,6 +39,15 @@ import ModalDelete from "./Modals/ModalDelete";
 import ModalEditDeveloper from "./Modals/ModalEditClient";
 import clientServices from "../../services/clientServices";
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#06142A",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 const Filter = [
   {
     value: "nom",
@@ -200,31 +210,31 @@ function GestionClient() {
         <Table sx={{ minWidth: 500 }}>
           <TableHead>
             <TableRow hover>
-              <TableCell>
+              <StyledTableCell>
                 <b> #</b>
-              </TableCell>
-              <TableCell padding="none">
+              </StyledTableCell>
+              <StyledTableCell padding="none">
                 <b>Nom </b>
-              </TableCell>
+              </StyledTableCell>
 
-              <TableCell>
+              <StyledTableCell>
                 <b> Prénom</b>
-              </TableCell>
-              <TableCell padding="none">
+              </StyledTableCell>
+              <StyledTableCell padding="none">
                 <b>Email </b>
-              </TableCell>
-              <TableCell>
+              </StyledTableCell>
+              <StyledTableCell>
                 {" "}
                 <b> N° Téléphone</b>{" "}
-              </TableCell>
-              <TableCell padding="none">
+              </StyledTableCell>
+              <StyledTableCell padding="none">
                 {" "}
                 <b> Pays </b>{" "}
-              </TableCell>
-              <TableCell padding="none">
+              </StyledTableCell>
+              <StyledTableCell padding="none">
                 {" "}
                 <b> Autre </b>{" "}
-              </TableCell>
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -281,6 +291,15 @@ function GestionClient() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{
+              ".MuiTablePagination-selectLabel, .MuiTablePagination-input, .MuiTablePagination-menuItem  ":
+                {
+                  marginTop: 1,
+                },
+              " .MuiTablePagination-displayedRows ": {
+                marginTop: 2,
+              },
+            }}
           />
         </Box>
       </TableContainer>

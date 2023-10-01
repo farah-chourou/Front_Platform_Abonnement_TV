@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -41,6 +42,7 @@ import ModalAddDeveloper from "./Modals/ModalAddClient";
 import ModalDelete from "./Modals/ModalDelete";
 import ModalEditDeveloper from "./Modals/ModalEditClient";
 import clientServices from "../../services/clientServices";
+import abonnementServices from "../../services/abonnementServices";
 
 function DetailsClient() {
   const { id } = useParams();
@@ -50,7 +52,9 @@ function DetailsClient() {
     isError,
     error,
   } = useQuery("clientInformations", () => clientServices.getOne(id));
-
+  const { data: abonnList } = useQuery("abonnList", () =>
+    abonnementServices.getAllByClientID(id)
+  );
   return (
     <Container className="container">
       <Helmet>
@@ -145,66 +149,37 @@ function DetailsClient() {
                 Abonnements
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={6}>
-                  <Card
-                    sx={{
-                      boxShadow: 4,
-                      borderRadius: 2,
-                      backgroundColor: "light",
-                    }}
-                  >
-                    <CardContent alignItems="center">
-                      <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="subtitle1" align="right">
-                          Type Abonnement
-                        </Typography>
-                        <Typography variant="subtitle1" align="left">
-                          Status
-                        </Typography>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <Card
-                    sx={{
-                      boxShadow: 4,
-                      borderRadius: 2,
-                      backgroundColor: "light",
-                    }}
-                  >
-                    <CardContent alignItems="center">
-                      <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="subtitle1" align="right">
-                          Type Abonnement
-                        </Typography>
-                        <Typography variant="subtitle1" align="left">
-                          Status
-                        </Typography>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Grid>{" "}
-                <Grid item xs={12} sm={6} md={6}>
-                  <Card
-                    sx={{
-                      boxShadow: 4,
-                      borderRadius: 2,
-                      backgroundColor: "light",
-                    }}
-                  >
-                    <CardContent alignItems="center">
-                      <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="subtitle1" align="right">
-                          Type Abonnement
-                        </Typography>
-                        <Typography variant="subtitle1" align="left">
-                          Status
-                        </Typography>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                {abonnList?.map((item) => (
+                  <Grid item xs={12} sm={6} md={6}>
+                    <Card
+                      sx={{
+                        boxShadow: 4,
+                        borderRadius: 2,
+                        backgroundColor: "light",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <CardContent alignItems="center">
+                        <Stack direction="row" justifyContent="space-between">
+                          <Typography variant="subtitle1" align="right">
+                            {item.typeAbonnID.label}
+                          </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            align="left"
+                            color={
+                              item.etatPaiement === "PAIED"
+                                ? "success"
+                                : "error"
+                            }
+                          >
+                            {item.etatPaiement}
+                          </Typography>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
             </Box>{" "}
           </Stack>
