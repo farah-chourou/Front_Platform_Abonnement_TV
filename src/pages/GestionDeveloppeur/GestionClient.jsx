@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 // @mui
@@ -38,6 +38,9 @@ import ModalAddDeveloper from "./Modals/ModalAddClient";
 import ModalDelete from "./Modals/ModalDelete";
 import ModalEditDeveloper from "./Modals/ModalEditClient";
 import clientServices from "../../services/clientServices";
+import Loading from "../../layouts/loading/Loading";
+import { UserContext } from "../../store/Contexts";
+import { roles } from "../../custom/roles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,6 +49,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+  },
+}));
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    border: 0,
   },
 }));
 const Filter = [
@@ -71,6 +82,8 @@ const Filter = [
   },
 ];
 function GestionClient() {
+  const { user } = useContext(UserContext);
+
   const [Developers, setDevelopers] = useState([]);
   const [popup, setPopup] = useState({
     open: false,
@@ -164,13 +177,17 @@ function GestionClient() {
         <Typography variant="h4" gutterBottom>
           Liste des clients
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() => openAdd()}
-        >
-          Nouveau Clients
-        </Button>
+        {user?.role === roles.SUPER_ADMIN ? (
+          <Button
+            variant="contained"
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={() => openAdd()}
+          >
+            Nouveau Clients
+          </Button>
+        ) : (
+          ""
+        )}
       </Stack>
       <Stack direction="row" alignItems="center" mb={5}>
         <Box>
@@ -206,103 +223,117 @@ function GestionClient() {
           </TextField>
         </Box>
       </Stack>
-      <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
-        <Table sx={{ minWidth: 500 }}>
-          <TableHead>
-            <TableRow hover>
-              <StyledTableCell>
-                <b> #</b>
-              </StyledTableCell>
-              <StyledTableCell padding="none">
-                <b>Nom </b>
-              </StyledTableCell>
+      {isLoading ? (
+        <Paper>
+          <Loading />
+        </Paper>
+      ) : (
+        <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
+          <Table sx={{ minWidth: 500 }}>
+            <TableHead>
+              <TableRow hover>
+                <StyledTableCell>
+                  <b> #</b>
+                </StyledTableCell>
+                <StyledTableCell padding="none">
+                  <b>Nom </b>
+                </StyledTableCell>
 
-              <StyledTableCell>
-                <b> Prénom</b>
-              </StyledTableCell>
-              <StyledTableCell padding="none">
-                <b>Email </b>
-              </StyledTableCell>
-              <StyledTableCell>
-                {" "}
-                <b> N° Téléphone</b>{" "}
-              </StyledTableCell>
-              <StyledTableCell padding="none">
-                {" "}
-                <b> Pays </b>{" "}
-              </StyledTableCell>
-              <StyledTableCell padding="none">
-                {" "}
-                <b> Autre </b>{" "}
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pageData?.map((item) => (
-              <TableRow key={item._id}>
-                <TableCell>
-                  <Avatar name={`${item.nom} ${item.prenom} `} />
-                </TableCell>
-                <TableCell padding="none">{item.nom}</TableCell>
-                <TableCell>{item.prenom}</TableCell>
-                <TableCell padding="none">{item.email}</TableCell>{" "}
-                <TableCell>{item.numTelephone}</TableCell>
-                <TableCell padding="none">{item.pays}</TableCell>
-                <TableCell padding="none">
-                  <Tooltip title="Supprimer">
-                    <IconButton
-                      onClick={() => openDelete(item)}
-                      color="primary"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Modifier">
-                    <IconButton
-                      onClick={() => openUpdate(item)}
-                      color="primary"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Voir Détails">
-                    <IconButton
-                      onClick={() => openShow(item._id)}
-                      color="primary"
-                    >
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
+                <StyledTableCell>
+                  <b> Prénom</b>
+                </StyledTableCell>
+                <StyledTableCell padding="none">
+                  <b>Email </b>
+                </StyledTableCell>
+                <StyledTableCell>
+                  {" "}
+                  <b> N° Téléphone</b>{" "}
+                </StyledTableCell>
+                <StyledTableCell padding="none">
+                  {" "}
+                  <b> Pays </b>{" "}
+                </StyledTableCell>
+                <StyledTableCell padding="none">
+                  {" "}
+                  <b> Autre </b>{" "}
+                </StyledTableCell>
               </TableRow>
-            ))}
-          </TableBody>{" "}
-        </Table>
-        <Box
-          sx={{
-            alignItems: "center",
-          }}
-        >
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={filteredData?.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+            </TableHead>
+            <TableBody>
+              {pageData?.map((item) => (
+                <StyledTableRow key={item._id}>
+                  <TableCell>
+                    <Avatar name={`${item.nom} ${item.prenom} `} />
+                  </TableCell>
+                  <TableCell padding="none">{item.nom}</TableCell>
+                  <TableCell>{item.prenom}</TableCell>
+                  <TableCell padding="none">{item.email}</TableCell>{" "}
+                  <TableCell>{item.numTelephone}</TableCell>
+                  <TableCell padding="none">{item.pays}</TableCell>
+                  <TableCell padding="none">
+                    {user?.role === roles.SUPER_ADMIN ? (
+                      <Tooltip title="Supprimer">
+                        <IconButton
+                          onClick={() => openDelete(item)}
+                          color="primary"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      ""
+                    )}
+                    {user?.role === roles.SUPER_ADMIN ? (
+                      <Tooltip title="Modifier">
+                        <IconButton
+                          onClick={() => openUpdate(item)}
+                          color="primary"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      ""
+                    )}
+                    <Tooltip title="Voir Détails">
+                      <IconButton
+                        onClick={() => openShow(item._id)}
+                        color="primary"
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>{" "}
+          </Table>
+          <Box
             sx={{
-              ".MuiTablePagination-selectLabel, .MuiTablePagination-input, .MuiTablePagination-menuItem  ":
-                {
-                  marginTop: 1,
-                },
-              " .MuiTablePagination-displayedRows ": {
-                marginTop: 2,
-              },
+              alignItems: "center",
             }}
-          />
-        </Box>
-      </TableContainer>
+          >
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={filteredData?.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              sx={{
+                ".MuiTablePagination-selectLabel, .MuiTablePagination-input, .MuiTablePagination-menuItem  ":
+                  {
+                    marginTop: 1,
+                  },
+                " .MuiTablePagination-displayedRows ": {
+                  marginTop: 2,
+                },
+              }}
+            />
+          </Box>
+        </TableContainer>
+      )}
 
       {popup.type === "add" && (
         <ModalAddDeveloper popup={popup} handleClose={handleClose} />

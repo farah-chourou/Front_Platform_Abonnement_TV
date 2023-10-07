@@ -2,26 +2,21 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  IconButton,
-  InputAdornment,
   TextField,
-  Checkbox,
-  Link,
   Container,
   Typography,
-  Divider,
-  Stack,
   Button,
+  CssBaseline,
 } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import { LoadingButton } from "@mui/lab";
 import Box from "@mui/material/Box";
-import Switch from "@mui/material/Switch";
 import Paper from "@mui/material/Paper";
 import Zoom from "@mui/material/Zoom";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import useResponsive from "../../hooks/useResponsive";
-import Logo from "../../components/logo";
-import Iconify from "../../components/iconify";
+import authService from "../../services/authService";
+import { doMutation } from "../../utils/mutation";
 
 const icon = (
   <Paper sx={{ m: 1 }}>
@@ -30,6 +25,8 @@ const icon = (
     </Box>
   </Paper>
 );
+const defaultTheme = createTheme();
+
 export default function ForgetPasswordPage() {
   const navigate = useNavigate();
   const [checked, setChecked] = useState(false);
@@ -38,12 +35,23 @@ export default function ForgetPasswordPage() {
   const [userInfo, setUserInfo] = useState({
     email: "",
   });
-
+  const { mutate, isSuccess } = doMutation(
+    "Error message if any",
+    "Abonnement supprimer avec succès",
+    "abonnData",
+    (data) => authService.forgotPassword(data)
+  );
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
   const onRecover = (e) => {
     e.preventDefault();
+    try {
+      console.log(userInfo.email);
+      mutate(userInfo);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleNavigate = () => {
     navigate("/login");
@@ -51,71 +59,85 @@ export default function ForgetPasswordPage() {
   return (
     <div className="bg-light h-100">
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Connexion </title>
       </Helmet>
-      <Logo
-        sx={{
-          position: "fixed",
-          top: { xs: 16, sm: 24, md: 40 },
-          left: { xs: 16, sm: 24, md: 40 },
-        }}
-      />
+      <div style={{ margin: 15 }}>
+        <img alt="Logo" src="/assets/images/logo.png" height={60} />
+      </div>
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          minHeight: "100vh",
+          minHeight: "70vh",
         }}
       >
-        <Container
-          maxWidth="sm"
-          sx={{
-            backgroundColor: "white",
-            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-            borderRadius: "16px",
-            p: 4,
-          }}
-        >
-          {checked ? (
-            <>
-              <Typography variant="h4" gutterBottom sx={{ paddingBottom: 3 }}>
-                Mot de passe envoyé avec succès{" "}
-              </Typography>
+        <ThemeProvider theme={defaultTheme}>
+          <Container
+            component="main"
+            maxWidth="xs"
+            sx={{
+              backgroundColor: "white",
+              padding: 5,
+              borderRaduis: 4,
+              boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+            }}
+          >
+            <CssBaseline />
+
+            {isSuccess ? (
+              <>
+                <Typography variant="h4" gutterBottom sx={{ paddingBottom: 3 }}>
+                  Mot de passe envoyé avec succès{" "}
+                </Typography>
+                <Box
+                  sx={{
+                    height: 120,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Zoom
+                    in={checked}
+                    style={{ transitionDelay: isSuccess ? "500ms" : "0ms" }}
+                  >
+                    {icon}
+                  </Zoom>
+                </Box>
+                <LoadingButton
+                  sx={{ mt: 4 }}
+                  fullWidth
+                  size="large"
+                  variant="outlined"
+                  onClick={handleNavigate}
+                >
+                  Revenir à la page de login
+                </LoadingButton>{" "}
+              </>
+            ) : (
               <Box
                 sx={{
-                  height: 120,
                   display: "flex",
-                  justifyContent: "center",
+                  flexDirection: "column",
                   alignItems: "center",
                 }}
               >
-                <Zoom
-                  in={checked}
-                  style={{ transitionDelay: checked ? "500ms" : "0ms" }}
+                {" "}
+                <Typography component="h1" variant="h5">
+                  Récupérer votre mot de passe{" "}
+                </Typography>
+                <Box
+                  component="form"
+                  onSubmit={onRecover}
+                  noValidate
+                  sx={{ mt: 1 }}
                 >
-                  {icon}
-                </Zoom>
-              </Box>
-              <LoadingButton
-                sx={{ mt: 4 }}
-                fullWidth
-                size="large"
-                variant="outlined"
-                onClick={handleNavigate}
-              >
-                Revenir à la page de login
-              </LoadingButton>{" "}
-            </>
-          ) : (
-            <>
-              {" "}
-              <Typography variant="h4" gutterBottom sx={{ paddingBottom: 3 }}>
-                Récupérer votre mot de passe{" "}
-              </Typography>
-              <form onSubmit={(e) => onRecover(e)}>
-                <Stack spacing={3}>
                   <TextField
+                    margin="normal"
+                    fullWidth
                     name="email"
+                    autoFocus
+                    autoComplete="email"
                     value={userInfo.email}
                     label="Entrer votre mail ici "
                     onChange={handleChange}
@@ -123,13 +145,6 @@ export default function ForgetPasswordPage() {
                     error={errorMail}
                     helperText={errorMail ? "Mail invalide" : ""}
                   />
-                </Stack>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  sx={{ my: 2 }}
-                >
                   <Typography
                     variant="subtitle2"
                     underline="hover"
@@ -138,28 +153,22 @@ export default function ForgetPasswordPage() {
                   >
                     On va vous envoyer un nouveau mot de passe à votre email.
                   </Typography>
-                </Stack>
-                <LoadingButton
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Récupérer
-                </LoadingButton>{" "}
-                <LoadingButton
-                  sx={{ mt: 1 }}
-                  fullWidth
-                  size="large"
-                  variant="outlined"
-                  onClick={handleNavigate}
-                >
-                  Revenir à la page de login
-                </LoadingButton>{" "}
-              </form>
-            </>
-          )}
-        </Container>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 1 }}
+                  >
+                    Récupérer
+                  </Button>{" "}
+                  <Button fullWidth variant="outlined" onClick={handleNavigate}>
+                    Revenir à la page de login
+                  </Button>{" "}
+                </Box>
+              </Box>
+            )}
+          </Container>
+        </ThemeProvider>
       </div>
     </div>
   );

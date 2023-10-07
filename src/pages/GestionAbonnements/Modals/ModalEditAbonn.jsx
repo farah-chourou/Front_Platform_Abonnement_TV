@@ -67,7 +67,7 @@ function ModalEditClient({ popup, handleClose }) {
 
   return (
     <Dialog open={open} handleClose={handleClose}>
-      <DialogTitle>{"Modifier Client "}</DialogTitle>
+      <DialogTitle>{"Modifier Abonnement "}</DialogTitle>
 
       <form onSubmit={(e) => handleSubmit(e)}>
         <DialogContent dividers>
@@ -91,6 +91,7 @@ function ModalEditClient({ popup, handleClose }) {
                 size="small"
                 fullWidth
                 onChange={handleChange}
+                defaultValue={"gg"}
               >
                 {clientList?.map((option) => (
                   <MenuItem key={option.value} value={option._id}>
@@ -130,8 +131,8 @@ function ModalEditClient({ popup, handleClose }) {
                 fullWidth
                 onChange={handleChange}
               >
-                {PeriodeList?.map((option, index) => (
-                  <MenuItem key={option.value} value={option._id}>
+                {PeriodeList?.map((option) => (
+                  <MenuItem key={option.value} value={option}>
                     {option}
                   </MenuItem>
                 ))}

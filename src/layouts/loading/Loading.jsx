@@ -11,7 +11,7 @@ export default function Loading() {
       direction="column"
       justifyContent="center"
       alignItems="center"
-      style={{ height: 500 }}
+      style={{ height: 300 }}
     >
       <Box sx={{ display: "flex" }}>
         <CircularProgress />

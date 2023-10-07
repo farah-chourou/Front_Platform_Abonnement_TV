@@ -39,7 +39,7 @@ function ModalAddPayement({ popup, handleClose }) {
   const { mutate } = doMutation(
     "Error message if any",
     "Paiement ajouté avec succès",
-    "PaiementData",
+    "abonnementInformations",
     (data) => abonnementServices.update(data),
     handleClose
   );

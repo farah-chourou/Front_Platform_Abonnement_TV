@@ -1,4 +1,12 @@
-import { Navigate, useRoutes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import { useEffect } from "react";
+
 // layouts
 import DashboardLayout from "../layouts/dashboard";
 import SimpleLayout from "../layouts/simple";
@@ -15,47 +23,50 @@ import DetailsAbonnement from "../pages/GestionAbonnements/DetailsAbonnement";
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const routes = useRoutes([
-    { element: <Navigate to="/login" />, index: true },
+  const navigate = useNavigate();
 
-    {
-      path: "/app",
-      element: <DashboardLayout />,
-      children: [
-        { path: "gestion_clients", element: <GestionDeveloppeur /> },
-        { path: "gestion_clients/details/:id", element: <DetailsClient /> },
-        { path: "gestion_abonnements", element: <GestionAbonnements /> },
-        {
-          path: "gestion_abonnements/details/:id",
-          element: <DetailsAbonnement />,
-        },
-        {
-          path: "parametre",
-          element: <Parametre />,
-        },
-      ],
-    },
-    {
-      path: "login",
-      element: <LoginPage />,
-    },
-    {
-      path: "login/oublierMdp",
-      element: <ForgetPasswordPage />,
-    },
-    {
-      element: <SimpleLayout />,
-      children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: "404", element: <Page404 /> },
-        { path: "*", element: <Navigate to="/404" /> },
-      ],
-    },
-    {
-      path: "*",
-      element: <Navigate to="/404" replace />,
-    },
-  ]);
+  const isAuthenticated = () => {
+    const token = localStorage.getItem("refreshToken");
+    return token !== "undefined" && token !== null;
+  };
+  const location = useLocation();
 
-  return routes;
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      if (location.pathname === "/login/oublierMdp") {
+        return;
+      }
+      navigate("/login");
+    } else if (location.pathname === "/") {
+      navigate("/app/gestion_clients");
+    }
+  }, []);
+
+  return (
+    <Routes>
+      <Route path="/" element={<SimpleLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="login/oublierMdp" element={<ForgetPasswordPage />} />
+        <Route path="404" element={<Page404 />} />
+      </Route>
+
+      {isAuthenticated() && (
+        <Route path="/app/*" element={<DashboardLayout />}>
+          <Route path="gestion_clients" element={<GestionDeveloppeur />} />
+          <Route
+            path="gestion_clients/details/:id"
+            element={<DetailsClient />}
+          />
+          <Route path="gestion_abonnements" element={<GestionAbonnements />} />
+          <Route
+            path="gestion_abonnements/details/:id"
+            element={<DetailsAbonnement />}
+          />
+          <Route path="parametre" element={<Parametre />} />
+        </Route>
+      )}
+
+      <Route path="*" element={<Navigate to="/404" replace />} />
+    </Routes>
+  );
 }

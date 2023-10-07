@@ -13,6 +13,7 @@ import authService from "./services/authService";
 import Loading from "./layouts/loading/Loading";
 import { UserContext } from "./store/Contexts";
 import "./pages/StyleMain.css";
+import Loader from "./components/Loader";
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ export default function App() {
     authService
       .getUserByToken()
       .then((response) => {
+        console.log(response.data);
         setUser(response.data.data);
         setLoading(false);
       })
@@ -32,6 +34,9 @@ export default function App() {
       });
   }, []);
 
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <ThemeProvider>
       <CustomToaster />

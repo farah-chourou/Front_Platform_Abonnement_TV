@@ -1,11 +1,7 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from "react";
-import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
-
-import PropTypes from "prop-types";
 
 // @mui
 import {
@@ -17,12 +13,14 @@ import {
   Grid,
   TextField,
   Button,
+  Paper,
 } from "@mui/material";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteModal from "../Modals/DeleteModal";
 import { doMutation } from "../../../utils/mutation";
 import typeAbonnServices from "../../../services/typeAbonnServices";
+import Loading from "../../../layouts/loading/Loading";
 
 function TypeAbonnTabs() {
   const [Label, setLabel] = useState("");
@@ -66,6 +64,15 @@ function TypeAbonnTabs() {
       console.log(error);
     }
   };
+
+  if (isLoading) {
+    return (
+      <Paper>
+        <Loading />
+      </Paper>
+    );
+  }
+
   return (
     <div>
       {" "}

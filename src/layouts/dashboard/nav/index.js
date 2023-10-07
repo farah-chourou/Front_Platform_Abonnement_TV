@@ -85,7 +85,7 @@ export default function Nav({ openNav, onCloseNav }) {
         <Button> close</Button>
       )}
       <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-        <img alt="Logo" src="/assets/images/logo.png" height={40} />
+        <img alt="Logo" src="/assets/images/logo.png" height={25} />
       </Box>
       <Link underline="none">
         <StyledAccount>
@@ -145,7 +145,7 @@ export default function Nav({ openNav, onCloseNav }) {
         }}
       >
         <Link sx={{ display: "contents" }}>
-          <img alt="Logo" src="/assets/images/logo.png" height={130} />
+          <img alt="Logo" src="/assets/images/logo.png" height={90} />
         </Link>
       </Box>
 

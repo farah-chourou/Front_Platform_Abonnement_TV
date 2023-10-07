@@ -1,6 +1,7 @@
+/* eslint-disable prefer-template */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 // @mui
@@ -40,6 +41,9 @@ import ModalDelete from "./Modals/ModalDelete";
 import ModalEditDeveloper from "./Modals/ModalEditAbonn";
 import abonnServices from "../../services/abonnementServices";
 import { fDate } from "../../utils/formatTime";
+import Loading from "../../layouts/loading/Loading";
+import { UserContext } from "../../store/Contexts";
+import { roles } from "../../custom/roles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -50,29 +54,45 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 const Filter = [
   {
-    value: "nom",
-    label: "Nom",
+    value: "application",
+    label: "Application",
   },
   {
-    value: "prenom",
-    label: "Prénom",
+    value: "adresseMac",
+    label: "Adresse MAC",
   },
   {
-    value: "email",
-    label: "Email",
+    value: "dateDebut",
+    label: "Date Début",
   },
   {
-    value: "numTelephone",
-    label: "N° Tél",
+    value: "dateFin",
+    label: "Date Fin",
   },
   {
-    value: "pays",
-    label: "Pays",
+    value: "etatPaiement",
+    label: "Etat Paiement",
+  },
+  {
+    value: "clientID",
+    label: "Nom Client",
   },
 ];
 function index() {
+  const { user } = useContext(UserContext);
+
   const [popup, setPopup] = useState({
     open: false,
     type: "",
@@ -119,20 +139,23 @@ function index() {
     if (filterValue === "") {
       return true;
     }
-    if (filterValue === "nom") {
-      return item.nom.toLowerCase().includes(searchText.toLowerCase());
+    if (filterValue === "application") {
+      return item.application.toLowerCase().includes(searchText.toLowerCase());
     }
-    if (filterValue === "prenom") {
-      return item.prenom.toLowerCase().includes(searchText.toLowerCase());
+    if (filterValue === "adresseMac") {
+      return item.adresseMac.toLowerCase().includes(searchText.toLowerCase());
     }
-    if (filterValue === "email") {
-      return item.email.toLowerCase().includes(searchText.toLowerCase());
+    if (filterValue === "dateDebut") {
+      return item.dateDebut.toLowerCase().includes(searchText.toLowerCase());
     }
-    if (filterValue === "numTelephone") {
-      return item.numTelephone.toLowerCase().includes(searchText.toLowerCase());
+    if (filterValue === "dateFin") {
+      return item.dateFin.toLowerCase().includes(searchText.toLowerCase());
     }
-    if (filterValue === "pays") {
-      return item.pays.toLowerCase().includes(searchText.toLowerCase());
+    if (filterValue === "etatPaiement") {
+      return item.etatPaiement.toLowerCase().includes(searchText.toLowerCase());
+    }
+    if (filterValue === "clientID") {
+      return item.clientID.nom.toLowerCase().includes(searchText.toLowerCase());
     }
     return true;
   });
@@ -165,13 +188,17 @@ function index() {
         <Typography variant="h4" gutterBottom>
           Liste des abonnements
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() => openAdd()}
-        >
-          Nouveau abonnements
-        </Button>
+        {user?.role === roles.SUPER_ADMIN ? (
+          <Button
+            variant="contained"
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={() => openAdd()}
+          >
+            Nouveau abonnements
+          </Button>
+        ) : (
+          ""
+        )}
       </Stack>
       <Stack direction="row" alignItems="center" mb={5}>
         <Box>
@@ -192,7 +219,6 @@ function index() {
             id="outlined-select-currency"
             select
             label="Filtre"
-            defaultValue="EUR"
             size="small"
             sx={{ width: 150 }}
             value={filterValue}
@@ -206,103 +232,114 @@ function index() {
           </TextField>
         </Box>
       </Stack>
-      <Paper>
-        <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
-          <Table sx={{ minWidth: 500 }} stickyHeader>
-            <TableHead>
-              <TableRow hover>
-                <StyledTableCell>
-                  <b>Client </b>
-                </StyledTableCell>
+      {isLoading ? (
+        <Paper>
+          <Loading />
+        </Paper>
+      ) : (
+        <Paper>
+          <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
+            <Table sx={{ minWidth: 500 }} stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>
+                    <b>Client </b>
+                  </StyledTableCell>
 
-                <StyledTableCell>
-                  <b> Application</b>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <b>Adresse Mac </b>
-                </StyledTableCell>
-                <StyledTableCell>
-                  {" "}
-                  <b> Date De Début</b>{" "}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {" "}
-                  <b> Date De Fin </b>{" "}
-                </StyledTableCell>
-
-                <StyledTableCell padding="none">
-                  {" "}
-                  <b> Autre </b>{" "}
-                </StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {pageData?.map((item) => (
-                <TableRow key={item._id} hover>
-                  <TableCell>
+                  <StyledTableCell>
+                    <b> Application</b>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <b>Adresse Mac </b>
+                  </StyledTableCell>
+                  <StyledTableCell>
                     {" "}
-                    <Chip
-                      label={item.clientID.nom}
-                      color="primary"
-                      variant="outlined"
-                    />{" "}
-                  </TableCell>
-                  <TableCell>{item.application}</TableCell>
-                  <TableCell padding="none">{item.application}</TableCell>{" "}
-                  <TableCell>{fDate(item.dateDebut)}</TableCell>
-                  <TableCell padding="none">{fDate(item.dateFin)}</TableCell>
-                  <TableCell padding="none">
-                    <Tooltip title="Supprimer">
-                      <IconButton
-                        onClick={() => openDelete(item)}
-                        color="primary"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Modifier">
-                      <IconButton
-                        onClick={() => openUpdate(item)}
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Voir Détails">
-                      <IconButton
-                        onClick={() => openShow(item._id)}
-                        color="primary"
-                      >
-                        <VisibilityIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>{" "}
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredData?.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          labelRowsPerPage="Ligne par page"
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          sx={{
-            ".MuiTablePagination-selectLabel, .MuiTablePagination-input, .MuiTablePagination-menuItem  ":
-              {
-                marginTop: 1,
-              },
-            " .MuiTablePagination-displayedRows ": {
-              marginTop: 2,
-            },
-          }}
-        />{" "}
-      </Paper>
+                    <b> Date De Début</b>{" "}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {" "}
+                    <b> Date De Fin </b>{" "}
+                  </StyledTableCell>
 
+                  <StyledTableCell padding="none">
+                    {" "}
+                    <b> Autre </b>{" "}
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pageData?.map((item) => (
+                  <StyledTableRow key={item._id} hover>
+                    <TableCell>
+                      {" "}
+                      <Chip
+                        label={item.clientID.nom + " " + item.clientID.prenom}
+                        color="primary"
+                        variant="outlined"
+                      />{" "}
+                    </TableCell>
+                    <TableCell>{item.application}</TableCell>
+                    <TableCell padding="none">{item.adresseMac}</TableCell>{" "}
+                    <TableCell>{fDate(item.dateDebut)}</TableCell>
+                    <TableCell>{fDate(item?.dateFin)} </TableCell>
+                    <TableCell padding="none">
+                      {user?.role === roles.SUPER_ADMIN ? (
+                        <>
+                          <Tooltip title="Supprimer">
+                            <IconButton
+                              onClick={() => openDelete(item)}
+                              color="primary"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                          {/*  <Tooltip title="Modifier">
+                            <IconButton
+                              onClick={() => openUpdate(item)}
+                              color="primary"
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip> */}
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      <Tooltip title="Voir Détails">
+                        <IconButton
+                          onClick={() => openShow(item._id)}
+                          color="primary"
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>{" "}
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={filteredData?.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            labelRowsPerPage="Ligne par page"
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{
+              ".MuiTablePagination-selectLabel, .MuiTablePagination-input, .MuiTablePagination-menuItem  ":
+                {
+                  marginTop: 1,
+                },
+              " .MuiTablePagination-displayedRows ": {
+                marginTop: 2,
+              },
+            }}
+          />{" "}
+        </Paper>
+      )}
       {popup.type === "add" && (
         <ModalAddDeveloper popup={popup} handleClose={handleClose} />
       )}

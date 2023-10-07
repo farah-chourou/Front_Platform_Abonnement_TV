@@ -24,13 +24,13 @@ const navConfig = [
     title: "Gestion Des Clients",
     path: "/app/gestion_clients",
     icon: <GroupIcon />,
-    role: roles.SUPER_ADMIN,
+    role: roles.ALL,
   },
   {
     title: "Gestion Des Abonnements",
     path: "/app/gestion_abonnements",
     icon: <CardMembershipOutlinedIcon />,
-    role: roles.SUPER_ADMIN,
+    role: roles.ALL,
   },
   {
     title: "Paramètres",
@@ -46,13 +46,6 @@ const navConfig = [
     icon: <BorderColorIcon />,
     role: roles.DEVELOPER,
 */
-  },
-
-  {
-    title: "Profile",
-    path: "/app/profile",
-    icon: <Person2Icon />,
-    role: roles.SUPER_ADMIN,
   },
 ];
 

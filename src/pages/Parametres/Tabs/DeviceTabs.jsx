@@ -10,14 +10,12 @@ import PropTypes from "prop-types";
 // @mui
 import {
   Typography,
-  Tab,
-  Tabs,
+  Paper,
   Card,
   Stack,
   CardContent,
   IconButton,
   Grid,
-  Box,
   TextField,
   Button,
 } from "@mui/material";
@@ -26,6 +24,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import deviceServices from "../../../services/deviceServices";
 import DeleteModal from "../Modals/DeleteModal";
 import { doMutation } from "../../../utils/mutation";
+import Loading from "../../../layouts/loading/Loading";
 
 function DeviceTabs() {
   const [Label, setLabel] = useState("");
@@ -69,6 +68,15 @@ function DeviceTabs() {
       console.log(error);
     }
   };
+
+  if (isLoading) {
+    return (
+      <Paper>
+        <Loading />
+      </Paper>
+    );
+  }
+
   return (
     <div>
       {" "}

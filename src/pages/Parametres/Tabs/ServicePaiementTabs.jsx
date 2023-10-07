@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import {
   Typography,
   Tab,
-  Tabs,
+  Paper,
   Card,
   Stack,
   CardContent,
@@ -26,6 +26,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteModal from "../Modals/DeleteModal";
 import { doMutation } from "../../../utils/mutation";
 import servicePaiementServices from "../../../services/servicePaiementServices";
+import Loading from "../../../layouts/loading/Loading";
 
 function ServicePaiementTabs() {
   const [Label, setLabel] = useState("");
@@ -69,6 +70,14 @@ function ServicePaiementTabs() {
       console.log(error);
     }
   };
+  if (isLoading) {
+    return (
+      <Paper>
+        <Loading />
+      </Paper>
+    );
+  }
+
   return (
     <div>
       {" "}
