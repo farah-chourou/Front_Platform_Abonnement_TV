@@ -34,7 +34,7 @@ const StyledAccount = styled("div")(({ theme }) => ({
   alignItems: "center",
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: alpha(theme.palette.grey[500], 0.12),
+  backgroundColor: alpha(theme.palette.grey[400], 0.12),
 }));
 
 Nav.propTypes = {
@@ -72,6 +72,7 @@ export default function Nav({ openNav, onCloseNav }) {
           height: 1,
           display: "flex",
           flexDirection: "column",
+          backgroundColor: "",
         },
       }}
     >
@@ -89,7 +90,10 @@ export default function Nav({ openNav, onCloseNav }) {
       </Box>
       <Link underline="none">
         <StyledAccount>
-          <Avatar src={user && user.profilImage} alt="photoURL" />
+          <Avatar
+            src="/assets/images/avatars/avatar_12.jpg"
+            alt="photo de profile"
+          />{" "}
         </StyledAccount>
       </Link>
       <NavSection2 data={navConfig} />
@@ -152,7 +156,10 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={user && user.profilImage} alt="photoURL" />
+            <Avatar
+              src="/assets/images/avatars/avatar_12.jpg"
+              alt="photo de profile"
+            />{" "}
             {console.log(user)}
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>

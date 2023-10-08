@@ -171,15 +171,18 @@ function DetailsAbonnement() {
             <Typography variant="h5" gutterBottom>
               Détails Paiement
             </Typography>
-
-            <Button
-              variant="outlined"
-              startIcon={<AddCircleOutlineIcon />}
-              onClick={() => openAdd()}
-              size="small"
-            >
-              Ajouter Paiement
-            </Button>
+            {abonnData?.etatPaiement === "NOT_PAIED" ? (
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleOutlineIcon />}
+                onClick={() => openAdd()}
+                size="small"
+              >
+                Ajouter Paiement
+              </Button>
+            ) : (
+              ""
+            )}
           </Stack>
 
           <table cellPadding={6}>

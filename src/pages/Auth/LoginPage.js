@@ -24,6 +24,7 @@ import { UserContext } from "../../store/Contexts";
 import Toastfunction from "../../utils/ToastFunction";
 
 const defaultTheme = createTheme();
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [showpassword, setShowpassword] = useState(false);
@@ -40,6 +41,7 @@ export default function LoginPage() {
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
+
   const onLogin = (e) => {
     e.preventDefault();
     seterrorpassword(false);
@@ -69,123 +71,118 @@ export default function LoginPage() {
         console.log(error);
       });
   };
+
   return (
-    <div className="bg-light h-200">
+    <div
+      className="bg-light"
+      style={{
+        background: "linear-gradient(145deg, #13103B 15%,     #1565C0 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Helmet>
         <title> Connexion </title>
-      </Helmet>{" "}
-      <div style={{ margin: 15 }}>
-        <img alt="Logo" src="/assets/images/logo.png" height={60} />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          minHeight: "60vh",
-        }}
-      >
-        <ThemeProvider theme={defaultTheme}>
-          <Container
-            component="main"
-            maxWidth="xs"
+      </Helmet>
+
+      <ThemeProvider theme={defaultTheme}>
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{
+            backgroundColor: "white",
+            padding: 5,
+            borderRadius: 4,
+            boxShadow: "#13133F 0px 8px 24px",
+            margin: 5,
+          }}
+        >
+          <CssBaseline />
+          <Box
             sx={{
-              backgroundColor: "white",
-              padding: 5,
-              borderRaduis: 4,
-              boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <CssBaseline />
+            <Avatar
+              src="/assets/images/logoWithBG.jpg"
+              sx={{ m: 1, bgcolor: "secondary.main", width: 56, height: 56 }}
+            />
+            <Typography component="h1" variant="h5" color="#13133F">
+              Connexion
+            </Typography>
+            <Box component="form" onSubmit={onLogin} noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="email"
+                label="Adresse Email "
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={userInfo.email}
+                onChange={handleChange}
+                error={erroremail}
+                helperText={erroremail ? "Eemail n'existe pas" : ""}
+                type="email"
+              />
+              <TextField
+                margin="normal"
+                required
+                size="small"
+                fullWidth
+                name="password"
+                label="Mot de passe"
+                id="password"
+                value={userInfo.password}
+                error={errorpassword}
+                helperText={errorpassword ? "Mot de passe incorrect" : ""}
+                onChange={handleChange}
+                type={showpassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowpassword(!showpassword)}
+                        edge="end"
+                      >
+                        <Iconify
+                          icon={
+                            showpassword ? "eva:eye-fill" : "eva:eye-off-fill"
+                          }
+                        />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                autoComplete="current-password"
+              />
 
-            <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Se connecter
-              </Typography>
-              <Box
-                component="form"
-                onSubmit={onLogin}
-                noValidate
-                sx={{ mt: 1 }}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Adresse Email "
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  value={userInfo.email}
-                  onChange={handleChange}
-                  error={erroremail}
-                  helperText={erroremail ? "Eemail n'existe pas" : ""}
-                  type="email"
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Mot de passe"
-                  id="password"
-                  value={userInfo.password}
-                  error={errorpassword}
-                  helperText={errorpassword ? "Mot de passe incorrect" : ""}
-                  onChange={handleChange}
-                  type={showpassword ? "text" : "password"}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowpassword(!showpassword)}
-                          edge="end"
-                        >
-                          <Iconify
-                            icon={
-                              showpassword ? "eva:eye-fill" : "eva:eye-off-fill"
-                            }
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  autoComplete="current-password"
-                />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Connexion
-                </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="/login/oublierMdp" variant="body2">
-                      Mot de passe oublié ?
-                    </Link>
-                  </Grid>
+                sE CONNECTER
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="/login/oublierMdp" variant="body2">
+                    Mot de passe oublié ?
+                  </Link>
                 </Grid>
-              </Box>
+              </Grid>
             </Box>
-          </Container>
-        </ThemeProvider>
-      </div>
+          </Box>{" "}
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   CssBaseline,
+  Avatar,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -57,119 +58,131 @@ export default function ForgetPasswordPage() {
     navigate("/login");
   };
   return (
-    <div className="bg-light h-100">
+    <div
+      style={{
+        background: "linear-gradient(145deg, #13103B 15%,     #1565C0 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Helmet>
         <title> Connexion </title>
       </Helmet>
-      <div style={{ margin: 15 }}>
-        <img alt="Logo" src="/assets/images/logo.png" height={60} />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          minHeight: "70vh",
-        }}
-      >
-        <ThemeProvider theme={defaultTheme}>
-          <Container
-            component="main"
-            maxWidth="xs"
-            sx={{
-              backgroundColor: "white",
-              padding: 5,
-              borderRaduis: 4,
-              boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-            }}
-          >
-            <CssBaseline />
 
-            {isSuccess ? (
-              <>
-                <Typography variant="h4" gutterBottom sx={{ paddingBottom: 3 }}>
-                  Mot de passe envoyé avec succès{" "}
-                </Typography>
-                <Box
-                  sx={{
-                    height: 120,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Zoom
-                    in={checked}
-                    style={{ transitionDelay: isSuccess ? "500ms" : "0ms" }}
-                  >
-                    {icon}
-                  </Zoom>
-                </Box>
-                <LoadingButton
-                  sx={{ mt: 4 }}
-                  fullWidth
-                  size="large"
-                  variant="outlined"
-                  onClick={handleNavigate}
-                >
-                  Revenir à la page de login
-                </LoadingButton>{" "}
-              </>
-            ) : (
+      <ThemeProvider theme={defaultTheme}>
+        <Container
+          component="main"
+          maxWidth="xs"
+          sx={{
+            backgroundColor: "white",
+            padding: 5,
+            borderRadius: 4,
+            boxShadow: "#13133F 0px 8px 24px",
+            margin: 5,
+          }}
+        >
+          <CssBaseline />
+
+          {isSuccess ? (
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h4" gutterBottom sx={{ paddingBottom: 3 }}>
+                Mot de passe envoyé avec succès{" "}
+              </Typography>
               <Box
                 sx={{
+                  height: 120,
                   display: "flex",
-                  flexDirection: "column",
+                  justifyContent: "center",
                   alignItems: "center",
                 }}
               >
-                {" "}
-                <Typography component="h1" variant="h5">
-                  Récupérer votre mot de passe{" "}
-                </Typography>
-                <Box
-                  component="form"
-                  onSubmit={onRecover}
-                  noValidate
-                  sx={{ mt: 1 }}
+                <Zoom
+                  in={checked}
+                  style={{ transitionDelay: isSuccess ? "500ms" : "0ms" }}
                 >
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    name="email"
-                    autoFocus
-                    autoComplete="email"
-                    value={userInfo.email}
-                    label="Entrer votre mail ici "
-                    onChange={handleChange}
-                    required
-                    error={errorMail}
-                    helperText={errorMail ? "Mail invalide" : ""}
-                  />
-                  <Typography
-                    variant="subtitle2"
-                    underline="hover"
-                    color="#3f51b5"
-                    sx={{ p: 0.5 }}
-                  >
-                    On va vous envoyer un nouveau mot de passe à votre email.
-                  </Typography>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 1 }}
-                  >
-                    Récupérer
-                  </Button>{" "}
-                  <Button fullWidth variant="outlined" onClick={handleNavigate}>
-                    Revenir à la page de login
-                  </Button>{" "}
-                </Box>
+                  {icon}
+                </Zoom>
               </Box>
-            )}
-          </Container>
-        </ThemeProvider>
-      </div>
+              <LoadingButton
+                sx={{ mt: 4 }}
+                fullWidth
+                size="large"
+                variant="outlined"
+                onClick={handleNavigate}
+              >
+                Revenir à la page de login
+              </LoadingButton>{" "}
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {" "}
+              <Avatar
+                src="/assets/images/logoWithBG.jpg"
+                sx={{ m: 1, bgcolor: "secondary.main", width: 56, height: 56 }}
+              />
+              <Typography component="h1" variant="h5" color="#13133F">
+                Récupérer votre mot de passe{" "}
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={onRecover}
+                noValidate
+                sx={{ mt: 1 }}
+              >
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  name="email"
+                  size="small"
+                  autoFocus
+                  autoComplete="email"
+                  value={userInfo.email}
+                  label="Entrer votre mail ici "
+                  onChange={handleChange}
+                  required
+                  error={errorMail}
+                  helperText={errorMail ? "Mail invalide" : ""}
+                />
+                <Typography
+                  variant="subtitle2"
+                  underline="hover"
+                  color="#3f51b5"
+                  sx={{ p: 0.5 }}
+                >
+                  On va vous envoyer un nouveau mot de passe à votre email.
+                </Typography>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 1 }}
+                >
+                  Récupérer
+                </Button>{" "}
+                <Button fullWidth variant="outlined" onClick={handleNavigate}>
+                  Revenir à la page de login
+                </Button>{" "}
+              </Box>
+            </Box>
+          )}
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }
