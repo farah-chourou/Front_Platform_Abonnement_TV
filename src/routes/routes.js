@@ -36,6 +36,7 @@ export default function Router() {
       if (location.pathname === "/login/oublierMdp") {
         return;
       }
+      console.log("Heeeey");
       navigate("/login");
     } else if (location.pathname === "/") {
       navigate("/app/gestion_clients");
