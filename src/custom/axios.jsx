@@ -3,7 +3,7 @@ import axios from "axios";
 const { REACT_APP_API_PORT } = process.env;
 
 const customAxios = axios.create({
-  baseURL: REACT_APP_API_PORT,
+  baseURL: "https://back-platform-suivi-commercial.onrender.com/",
 });
 
 customAxios.interceptors.request.use(
