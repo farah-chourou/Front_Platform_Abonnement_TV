@@ -46,6 +46,9 @@ export default function AccountPopover() {
 
     navigate("/login");
   };
+  const parame = () => {
+    navigate("/app/parametre");
+  };
   return (
     <>
       <IconButton
@@ -107,21 +110,14 @@ export default function AccountPopover() {
           >
             Accueil
           </MenuItem>
-          <MenuItem
-            onClick={() => {
-              setOpen(null);
-              navigate("/dashboard/profile");
-            }}
-          >
-            Profile
-          </MenuItem>
-          <MenuItem onClick={handleClose}>Paramètre</MenuItem>
+
+          <MenuItem onClick={parame}>Paramètre</MenuItem>
         </Stack>
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem onClick={logOut} sx={{ m: 1 }}>
-          Logout
+          Se déconnecter
         </MenuItem>
       </Popover>
     </>
