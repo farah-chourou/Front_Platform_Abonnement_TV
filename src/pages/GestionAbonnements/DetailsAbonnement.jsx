@@ -25,6 +25,7 @@ import { fDate } from "../../utils/formatTime";
 import ModalAddPayement from "./Modals/ModalAddPayement";
 import Loading from "../../layouts/loading/Loading";
 import formatImage from "../../utils/formatImage";
+import ModalEditPayement from "./Modals/ModalEditPayement";
 
 function DetailsAbonnement() {
   const { id } = useParams();
@@ -42,6 +43,9 @@ function DetailsAbonnement() {
   });
   const openAdd = () => {
     setPopup({ open: true, type: "add" });
+  };
+  const openEdit = () => {
+    setPopup({ open: true, type: "edit", value: abonnData });
   };
   const handleClose = () => {
     setPopup({ open: false, type: "", row: null });
@@ -62,22 +66,20 @@ function DetailsAbonnement() {
       </Helmet>
       <Paper>
         <Box p={2} boxShadow={4}>
-          <Typography variant="h5" gutterBottom>
-            Détails Abonnement
+          <Typography variant="h6" gutterBottom>
+            Détails Abonnement N° {abonnData._id}
           </Typography>
           <Stack direction="row" mt={2} mb={2} spacing={1} alignItems="center">
             <Chip
               variant="outlined"
               size="small"
               label={fDate(abonnData?.dateDebut)}
-              color="primary"
             />{" "}
             <ArrowRightAltIcon />
             <Chip
               variant="outlined"
               size="small"
               label={fDate(abonnData?.dateFin)}
-              color="primary"
             />
           </Stack>
           <table cellPadding={6}>
@@ -105,7 +107,7 @@ function DetailsAbonnement() {
                   Période
                 </Typography>
               </td>
-              <td> {abonnData?.periode}</td>
+              <td> {abonnData?.periode} Mois</td>
             </tr>
             <tr>
               <td>
@@ -141,7 +143,11 @@ function DetailsAbonnement() {
               </td>
             </tr>
             <tr>
-              <th scope="col">Certificat</th>
+              <td>
+                <Typography variant="subtitle1" color="gray">
+                  Certificat
+                </Typography>
+              </td>
               {abonnData?.files &&
               formatImage.isImageFile(abonnData.files[0]) ? (
                 <td>
@@ -168,12 +174,12 @@ function DetailsAbonnement() {
       <Paper>
         <Box p={2} mt={2} boxShadow={4}>
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h6" gutterBottom>
               Détails Paiement
             </Typography>
             {abonnData?.etatPaiement === "NOT_PAIED" ? (
               <Button
-                variant="outlined"
+                variant="contained"
                 startIcon={<AddCircleOutlineIcon />}
                 onClick={() => openAdd()}
                 size="small"
@@ -181,7 +187,14 @@ function DetailsAbonnement() {
                 Ajouter Paiement
               </Button>
             ) : (
-              ""
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleOutlineIcon />}
+                onClick={() => openEdit()}
+                size="small"
+              >
+                Modifier Paiement
+              </Button>
             )}
           </Stack>
 
@@ -242,6 +255,9 @@ function DetailsAbonnement() {
 
       {popup.type === "add" && (
         <ModalAddPayement popup={popup} handleClose={handleClose} />
+      )}
+      {popup.type === "edit" && (
+        <ModalEditPayement popup={popup} handleClose={handleClose} />
       )}
     </div>
   );

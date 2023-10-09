@@ -61,7 +61,6 @@ function ModalEditClient({ popup, handleClose }) {
                 label="Nom"
                 required
                 name="nom"
-                variant="filled"
                 size="small"
                 onChange={handleChange}
                 value={Client.nom}
@@ -72,7 +71,6 @@ function ModalEditClient({ popup, handleClose }) {
                 fullWidth
                 label="Prénom"
                 name="prenom"
-                variant="filled"
                 size="small"
                 required
                 onChange={handleChange}
@@ -85,7 +83,6 @@ function ModalEditClient({ popup, handleClose }) {
                 type="number"
                 label="N° Téléphone"
                 name="numTelephone"
-                variant="filled"
                 size="small"
                 required
                 onChange={handleChange}
@@ -100,7 +97,6 @@ function ModalEditClient({ popup, handleClose }) {
                 type="email"
                 label="Email"
                 name="email"
-                variant="filled"
                 size="small"
                 required
                 onChange={handleChange}
@@ -115,7 +111,6 @@ function ModalEditClient({ popup, handleClose }) {
                 type="text"
                 label="Pays"
                 name="pays"
-                variant="filled"
                 size="small"
                 required
                 onChange={handleChange}
@@ -128,7 +123,6 @@ function ModalEditClient({ popup, handleClose }) {
                 type="text"
                 label="Envoie"
                 name="envoie"
-                variant="filled"
                 size="small"
                 required
                 onChange={handleChange}
@@ -143,7 +137,6 @@ function ModalEditClient({ popup, handleClose }) {
                 rows={3}
                 label="Note"
                 name="note"
-                variant="filled"
                 size="small"
                 required
                 onChange={handleChange}

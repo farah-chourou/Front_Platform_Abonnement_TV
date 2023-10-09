@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Helmet } from "react-helmet-async";
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 // @mui
 import {
@@ -81,10 +81,7 @@ const Filter = [
     value: "dateFin",
     label: "Date Fin",
   },
-  {
-    value: "etatPaiement",
-    label: "Etat Paiement",
-  },
+
   {
     value: "clientID",
     label: "Nom Client",
@@ -151,9 +148,7 @@ function index() {
     if (filterValue === "dateFin") {
       return item.dateFin.toLowerCase().includes(searchText.toLowerCase());
     }
-    if (filterValue === "etatPaiement") {
-      return item.etatPaiement.toLowerCase().includes(searchText.toLowerCase());
-    }
+
     if (filterValue === "clientID") {
       return item.clientID.nom.toLowerCase().includes(searchText.toLowerCase());
     }
@@ -243,7 +238,10 @@ function index() {
               <TableHead>
                 <TableRow>
                   <StyledTableCell>
-                    <b>Client </b>
+                    <b>Etat </b>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <b> Client </b>
                   </StyledTableCell>
 
                   <StyledTableCell>
@@ -273,10 +271,22 @@ function index() {
                     <TableCell>
                       {" "}
                       <Chip
-                        label={item.clientID.nom + " " + item.clientID.prenom}
-                        color="primary"
-                        variant="outlined"
+                        size="small"
+                        label={
+                          item?.etatPaiement === "PAIED" ? "Payé" : "Non Payé"
+                        }
+                        color={
+                          item?.etatPaiement === "PAIED" ? "success" : "error"
+                        }
                       />{" "}
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <Link
+                        to={`/app/gestion_clients/details/${item?.clientID._id}`}
+                      >
+                        {item.clientID.nom + " " + item.clientID.prenom}
+                      </Link>{" "}
                     </TableCell>
                     <TableCell>{item.application}</TableCell>
                     <TableCell padding="none">{item.adresseMac}</TableCell>{" "}
