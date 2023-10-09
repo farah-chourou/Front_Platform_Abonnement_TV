@@ -36,9 +36,9 @@ export default function ForgetPasswordPage() {
   const [userInfo, setUserInfo] = useState({
     email: "",
   });
-  const { mutate, isSuccess } = doMutation(
+  const { mutate, success } = doMutation(
     "Error message if any",
-    "Abonnement supprimer avec succès",
+    "Mot de passe envoyé avec succès",
     "abonnData",
     (data) => authService.forgotPassword(data)
   );
@@ -48,7 +48,6 @@ export default function ForgetPasswordPage() {
   const onRecover = (e) => {
     e.preventDefault();
     try {
-      console.log(userInfo.email);
       mutate(userInfo);
     } catch (error) {
       console.log(error);
@@ -57,6 +56,7 @@ export default function ForgetPasswordPage() {
   const handleNavigate = () => {
     navigate("/login");
   };
+
   return (
     <div
       style={{
@@ -85,7 +85,7 @@ export default function ForgetPasswordPage() {
         >
           <CssBaseline />
 
-          {isSuccess ? (
+          {success ? (
             <Box
               sx={{
                 marginTop: 8,
@@ -106,8 +106,8 @@ export default function ForgetPasswordPage() {
                 }}
               >
                 <Zoom
-                  in={checked}
-                  style={{ transitionDelay: isSuccess ? "500ms" : "0ms" }}
+                  in={success}
+                  style={{ transitionDelay: success ? "500ms" : "0ms" }}
                 >
                   {icon}
                 </Zoom>
