@@ -33,7 +33,7 @@ import { styled } from "@mui/material/styles";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import SearchIcon from "@mui/icons-material/Search";
 import { useQuery } from "react-query";
 import ModalAddDeveloper from "./Modals/ModalAddAbonn";
@@ -44,6 +44,8 @@ import { fDate } from "../../utils/formatTime";
 import Loading from "../../layouts/loading/Loading";
 import { UserContext } from "../../store/Contexts";
 import { roles } from "../../custom/roles";
+import { doMutation } from "../../utils/mutation";
+import servicePaiementServices from "../../services/servicePaiementServices";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -154,6 +156,36 @@ function index() {
     }
     return true;
   });
+
+  const { mutate } = doMutation(
+    "Error message if any",
+    "Paiement modifier avec succès",
+    "abonnData",
+    (data) => abonnServices.update(data),
+    handleClose
+  );
+  const [Paiement, setPaiement] = useState({
+    etatPaiement: "",
+  });
+  const updatePaied = async (item) => {
+    try {
+      let updatedPaiement = null;
+
+      if (item.etatPaiement === "PAIED") {
+        updatedPaiement = { ...Paiement, etatPaiement: "NOT_PAIED" };
+      } else {
+        updatedPaiement = { ...Paiement, etatPaiement: "PAIED" };
+      }
+
+      await setPaiement(updatedPaiement);
+
+      const d = { _id: item._id, d: updatedPaiement };
+      mutate(d);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // pagination
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -285,7 +317,7 @@ function index() {
                       <Link
                         to={`/app/gestion_clients/details/${item?.clientID._id}`}
                       >
-                        {item.clientID.nom + " " + item.clientID.prenom}
+                        {item.clientID?.fullName}
                       </Link>{" "}
                     </TableCell>
                     <TableCell>{item.application}</TableCell>
@@ -301,6 +333,14 @@ function index() {
                               color="primary"
                             >
                               <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Modifier Paiement">
+                            <IconButton
+                              onClick={() => updatePaied(item)}
+                              color="primary"
+                            >
+                              <RequestQuoteIcon />
                             </IconButton>
                           </Tooltip>
                           {/*  <Tooltip title="Modifier">

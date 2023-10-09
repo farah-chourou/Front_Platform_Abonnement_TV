@@ -21,7 +21,6 @@ function ModalEditPayement({ popup, handleClose }) {
     servicePaiement: value?.servicePaiement._id, // Store the ID instead of label
     montant: value?.montant,
     destinataire: value?.destinataire,
-    etatPaiement: "PAIED",
   });
 
   const {

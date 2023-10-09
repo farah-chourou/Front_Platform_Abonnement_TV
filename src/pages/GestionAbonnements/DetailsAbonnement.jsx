@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable spaced-comment */
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
@@ -98,7 +99,10 @@ function DetailsAbonnement() {
                   Addresse MAC
                 </Typography>
               </td>
-              <td> {abonnData?.adresseMac}</td>
+              <td>
+                {" "}
+                {abonnData?.adresseMac ? abonnData?.adresseMac : "néant"}
+              </td>
             </tr>
             <tr>
               <td>
@@ -116,7 +120,12 @@ function DetailsAbonnement() {
                   Appareil
                 </Typography>
               </td>
-              <td> {abonnData?.deviceID.label}</td>
+              <td>
+                {" "}
+                {abonnData?.deviceID?.label
+                  ? abonnData?.deviceID?.label
+                  : "néant"}
+              </td>
             </tr>
             <tr>
               <td>
@@ -125,7 +134,12 @@ function DetailsAbonnement() {
                   Type d'abonnement
                 </Typography>
               </td>
-              <td> {abonnData?.typeAbonnID.label}</td>
+              <td>
+                {" "}
+                {abonnData?.typeAbonnID?.label
+                  ? abonnData?.typeAbonnID?.label
+                  : "néant"}
+              </td>
             </tr>
             <tr>
               <td>
@@ -136,9 +150,9 @@ function DetailsAbonnement() {
               </td>
               <td>
                 <Link
-                  to={`/app/gestion_clients/details/${abonnData?.clientID._id}`}
+                  to={`/app/gestion_clients/details/${abonnData?.clientID?._id}`}
                 >
-                  {abonnData?.clientID.nom} {abonnData?.clientID.prenom}
+                  {abonnData?.clientID?.fullName}
                 </Link>{" "}
               </td>
             </tr>
@@ -148,10 +162,10 @@ function DetailsAbonnement() {
                   Certificat
                 </Typography>
               </td>
-              {abonnData?.files &&
-              formatImage.isImageFile(abonnData.files[0]) ? (
+              {abonnData?.files.length > 0 &&
+              formatImage.isImageFile(abonnData?.files[0]) ? (
                 <td>
-                  <IconButton href={abonnData.files[0]} target="_blank">
+                  <IconButton href={abonnData?.files[0]} target="_blank">
                     {" "}
                     <ImageIcon />
                   </IconButton>{" "}
@@ -159,7 +173,11 @@ function DetailsAbonnement() {
               ) : (
                 <td>
                   {" "}
-                  <a href={abonnData.files[0]} target="_blank" rel="noreferrer">
+                  <a
+                    href={abonnData?.files[0]}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <IconButton>
                       {" "}
                       <PictureAsPdfIcon />
@@ -177,7 +195,7 @@ function DetailsAbonnement() {
             <Typography variant="h6" gutterBottom>
               Détails Paiement
             </Typography>
-            {abonnData?.etatPaiement === "NOT_PAIED" ? (
+            {abonnData?.montant === undefined ? (
               <Button
                 variant="contained"
                 startIcon={<AddCircleOutlineIcon />}
@@ -218,37 +236,40 @@ function DetailsAbonnement() {
                 />{" "}
               </td>
             </tr>
-            {abonnData?.etatPaiement === "PAIED" && (
-              <>
-                <tr>
-                  <td>
-                    {" "}
-                    <Typography variant="subtitle1" color="gray">
-                      Service De Paiement
-                    </Typography>
-                  </td>
-                  <td> {abonnData?.servicePaiement?.label}</td>
-                </tr>
-                <tr>
-                  <td>
-                    {" "}
-                    <Typography variant="subtitle1" color="gray">
-                      Montant
-                    </Typography>
-                  </td>
-                  <td> {abonnData?.montant} dt</td>
-                </tr>
-                <tr>
-                  <td>
-                    {" "}
-                    <Typography variant="subtitle1" color="gray">
-                      Destinataire
-                    </Typography>
-                  </td>
-                  <td> {abonnData?.destinataire}</td>
-                </tr>{" "}
-              </>
-            )}
+
+            <>
+              <tr>
+                <td>
+                  {" "}
+                  <Typography variant="subtitle1" color="gray">
+                    Service De Paiement
+                  </Typography>
+                </td>
+                <td> {abonnData?.servicePaiement?.label}</td>
+              </tr>
+              <tr>
+                <td>
+                  {" "}
+                  <Typography variant="subtitle1" color="gray">
+                    Montant
+                  </Typography>
+                </td>
+                <td>
+                  {abonnData?.montant !== undefined
+                    ? abonnData.montant + "dt"
+                    : null}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {" "}
+                  <Typography variant="subtitle1" color="gray">
+                    Destinataire
+                  </Typography>
+                </td>
+                <td> {abonnData?.destinataire}</td>
+              </tr>{" "}
+            </>
           </table>
         </Box>
       </Paper>

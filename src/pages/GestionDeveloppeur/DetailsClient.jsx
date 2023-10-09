@@ -67,9 +67,7 @@ function DetailsClient() {
               <Box alignItems="center">
                 {" "}
                 <Typography variant="h6">
-                  <strong>
-                    {clientData?.nom} {clientData?.prenom}{" "}
-                  </strong>
+                  <strong>{clientData?.fullName}</strong>
                 </Typography>
               </Box>
               <Box mt={1}>
@@ -86,7 +84,6 @@ function DetailsClient() {
                 <Stack direction="row" alignItems="center">
                   <PhoneIcon />
                   <Typography variant="body1" m={1}>
-                    {console.log(clientData)}
                     <span style={{ margin: 4 }}>
                       {" "}
                       {clientData?.numTelephone}
@@ -112,13 +109,6 @@ function DetailsClient() {
                     <Typography variant="h6">Pays</Typography>
                     <Typography variant="body1" color="gray">
                       {clientData?.pays}
-                    </Typography>
-                  </Box>
-
-                  <Box>
-                    <Typography variant="h6">Envoie</Typography>
-                    <Typography variant="body1" color="gray">
-                      {clientData?.envoie}
                     </Typography>
                   </Box>
 
@@ -159,7 +149,7 @@ function DetailsClient() {
                         <CardContent alignItems="center">
                           <Stack direction="row" justifyContent="space-between">
                             <Typography variant="subtitle1" align="right">
-                              {item.typeAbonnID.label}
+                              {item?.application}
                             </Typography>
                             <Typography
                               variant="subtitle1"

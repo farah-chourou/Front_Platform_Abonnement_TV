@@ -61,13 +61,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const Filter = [
   {
-    value: "nom",
-    label: "Nom",
+    value: "fullName",
+    label: "Nom & Prénom",
   },
-  {
-    value: "prenom",
-    label: "Prénom",
-  },
+
   {
     value: "email",
     label: "Email",
@@ -131,20 +128,20 @@ function GestionClient() {
     if (filterValue === "") {
       return true;
     }
-    if (filterValue === "nom") {
-      return item.nom.toLowerCase().includes(searchText.toLowerCase());
+    if (filterValue === "fullName") {
+      return item?.fullName?.toLowerCase().includes(searchText.toLowerCase());
     }
-    if (filterValue === "prenom") {
-      return item.prenom.toLowerCase().includes(searchText.toLowerCase());
-    }
+
     if (filterValue === "email") {
-      return item.email.toLowerCase().includes(searchText.toLowerCase());
+      return item?.email?.toLowerCase().includes(searchText.toLowerCase());
     }
     if (filterValue === "numTelephone") {
-      return item.numTelephone.toLowerCase().includes(searchText.toLowerCase());
+      return item?.numTelephone
+        ?.toLowerCase()
+        .includes(searchText.toLowerCase());
     }
     if (filterValue === "pays") {
-      return item.pays.toLowerCase().includes(searchText.toLowerCase());
+      return item?.pays?.toLowerCase().includes(searchText.toLowerCase());
     }
     return true;
   });
@@ -236,12 +233,9 @@ function GestionClient() {
                   <b> #</b>
                 </StyledTableCell>
                 <StyledTableCell padding="none">
-                  <b>Nom </b>
+                  <b>Nom & Prénom </b>
                 </StyledTableCell>
 
-                <StyledTableCell>
-                  <b> Prénom</b>
-                </StyledTableCell>
                 <StyledTableCell padding="none">
                   <b>Email </b>
                 </StyledTableCell>
@@ -263,13 +257,12 @@ function GestionClient() {
               {pageData?.map((item) => (
                 <StyledTableRow key={item._id}>
                   <TableCell>
-                    <Avatar name={`${item.nom} ${item.prenom} `} />
+                    <Avatar name={`${item.fullName}  `} />
                   </TableCell>
-                  <TableCell padding="none">{item.nom}</TableCell>
-                  <TableCell>{item.prenom}</TableCell>
-                  <TableCell padding="none">{item.email}</TableCell>{" "}
-                  <TableCell>{item.numTelephone}</TableCell>
-                  <TableCell padding="none">{item.pays}</TableCell>
+                  <TableCell>{item?.fullName}</TableCell>
+                  <TableCell padding="none">{item?.email}</TableCell>{" "}
+                  <TableCell>{item?.numTelephone}</TableCell>
+                  <TableCell padding="none">{item?.pays}</TableCell>
                   <TableCell padding="none">
                     {user?.role === roles.SUPER_ADMIN ? (
                       <Tooltip title="Supprimer">

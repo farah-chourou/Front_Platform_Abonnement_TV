@@ -18,6 +18,7 @@ import pendingAnimationData from "../../../components/pending.json";
 function ModalAddAbonnement({ popup, handleClose }) {
   const [Show, setShow] = useState(false);
   const { open, value } = popup;
+  const [ErrorMac, setErrorMac] = useState(false);
   const [Abonnement, setAbonnement] = useState({
     application: "",
     adresseMac: "",
@@ -60,19 +61,34 @@ function ModalAddAbonnement({ popup, handleClose }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(Abonnement);
-    const formData = new FormData();
-    formData.append("application", Abonnement.application);
-    formData.append("adresseMac", Abonnement.adresseMac);
-    formData.append("dateDebut", Abonnement.dateDebut);
-    formData.append("periode", Abonnement.periode);
-    formData.append("clientID", Abonnement.clientID);
-    formData.append("deviceID", Abonnement.deviceID);
-    formData.append("typeAbonnID", Abonnement.typeAbonnID);
-    formData.append("Documentation", Documentation);
-    console.log(Documentation);
+    setErrorMac(false);
+
     try {
-      mutate(formData);
+      const formData = new FormData();
+      formData.append("application", Abonnement.application);
+      if (Abonnement.adresseMac) {
+        formData.append("adresseMac", Abonnement.adresseMac);
+      }
+      formData.append("dateDebut", Abonnement.dateDebut);
+      formData.append("periode", Abonnement.periode);
+      formData.append("clientID", Abonnement.clientID);
+      if (Abonnement.deviceID) {
+        formData.append("deviceID", Abonnement.deviceID);
+      }
+      if (Abonnement.typeAbonnID) {
+        formData.append("typeAbonnID", Abonnement.typeAbonnID);
+      }
+      if (Documentation) {
+        formData.append("Documentation", Documentation);
+      }
+      if (
+        Abonnement.adresseMac.length === 17 ||
+        Abonnement.adresseMac.length === 0
+      ) {
+        mutate(formData);
+      } else {
+        setErrorMac(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -115,10 +131,11 @@ function ModalAddAbonnement({ popup, handleClose }) {
                   size="small"
                   fullWidth
                   onChange={handleChange}
+                  required
                 >
                   {clientList?.map((option) => (
                     <MenuItem key={option.value} value={option._id}>
-                      {option.nom} {option.prenom}
+                      {option.fullName}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -143,12 +160,14 @@ function ModalAddAbonnement({ popup, handleClose }) {
                   size="small"
                   fullWidth
                   onChange={handleChange}
+                  required
                 >
                   {[...Array(12)].map((_, index) => (
                     <MenuItem key={index + 1} value={index + 1}>
                       {index + 1} Mois
                     </MenuItem>
                   ))}
+                  <MenuItem value={24}>24 Mois</MenuItem>
                 </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -157,7 +176,6 @@ function ModalAddAbonnement({ popup, handleClose }) {
                   type="file"
                   name="Documentation"
                   size="small"
-                  required
                   onChange={handleChangeDoc}
                 />
               </Grid>
@@ -165,11 +183,13 @@ function ModalAddAbonnement({ popup, handleClose }) {
                 <TextField
                   fullWidth
                   label="Adresse Mac"
+                  placeholder="XX:XX:XX:XX:XX:XX"
                   name="adresseMac"
                   size="small"
-                  required
                   onChange={handleChange}
                   value={Abonnement.adresseMac}
+                  error={ErrorMac}
+                  helperText={ErrorMac ? "Adresse MAC  être de 17 lettre " : ""}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>

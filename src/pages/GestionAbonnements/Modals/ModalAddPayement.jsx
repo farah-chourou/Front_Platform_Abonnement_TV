@@ -23,7 +23,6 @@ function ModalAddPayement({ popup, handleClose }) {
     servicePaiement: "",
     montant: 0,
     destinataire: "",
-    etatPaiement: "PAIED",
   });
 
   const {

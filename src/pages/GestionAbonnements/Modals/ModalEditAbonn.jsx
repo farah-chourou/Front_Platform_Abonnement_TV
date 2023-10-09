@@ -95,7 +95,7 @@ function ModalEditClient({ popup, handleClose }) {
               >
                 {clientList?.map((option) => (
                   <MenuItem key={option.value} value={option._id}>
-                    {option.nom} {option.prenom}
+                    {option.fullName}
                   </MenuItem>
                 ))}
               </TextField>

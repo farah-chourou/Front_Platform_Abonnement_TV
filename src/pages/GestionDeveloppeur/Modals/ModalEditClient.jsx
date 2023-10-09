@@ -12,12 +12,10 @@ import clientServices from "../../../services/clientServices";
 function ModalEditClient({ popup, handleClose }) {
   const { open, value } = popup;
   const [Client, setClient] = useState({
-    prenom: value.prenom,
-    nom: value.nom,
+    fullName: value?.fullName,
     email: value.email,
     numTelephone: value.numTelephone,
     pays: value.pays,
-    envoie: value.envoie,
     note: value.note,
   });
 
@@ -58,23 +56,12 @@ function ModalEditClient({ popup, handleClose }) {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Nom"
+                label="Nom & Prénom"
                 required
-                name="nom"
+                name="fullName"
                 size="small"
                 onChange={handleChange}
-                value={Client.nom}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Prénom"
-                name="prenom"
-                size="small"
-                required
-                onChange={handleChange}
-                value={Client.prenom}
+                value={Client.fullName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -84,7 +71,6 @@ function ModalEditClient({ popup, handleClose }) {
                 label="N° Téléphone"
                 name="numTelephone"
                 size="small"
-                required
                 onChange={handleChange}
                 value={Client.numTelephone}
                 error={ErrorPhone}
@@ -98,7 +84,6 @@ function ModalEditClient({ popup, handleClose }) {
                 label="Email"
                 name="email"
                 size="small"
-                required
                 onChange={handleChange}
                 value={Client.email}
                 error={ErrorEmail}
@@ -115,18 +100,6 @@ function ModalEditClient({ popup, handleClose }) {
                 required
                 onChange={handleChange}
                 value={Client.pays}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                type="text"
-                label="Envoie"
-                name="envoie"
-                size="small"
-                required
-                onChange={handleChange}
-                value={Client.envoie}
               />
             </Grid>
             <Grid item xs={12} sm={12}>

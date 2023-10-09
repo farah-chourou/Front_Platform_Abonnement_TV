@@ -13,12 +13,10 @@ import { doMutation } from "../../../utils/mutation";
 function ModalAddClient({ popup, handleClose }) {
   const { open, value } = popup;
   const [Client, setClient] = useState({
-    prenom: "",
-    nom: "",
+    fullName: "",
     email: "",
     numTelephone: 0,
     pays: "",
-    envoie: "",
     note: "",
   });
 
@@ -40,7 +38,14 @@ function ModalAddClient({ popup, handleClose }) {
     e.preventDefault();
     console.log(Client);
     try {
-      mutate(Client);
+      if (
+        Client.numTelephone.length === 8 ||
+        Client.numTelephone.length === 0
+      ) {
+        mutate(Client);
+      } else {
+        setErrorPhone(true);
+      }
     } catch (error) {
       console.log(error);
       if (error.response.data.message === "Email already exists") {
@@ -60,23 +65,12 @@ function ModalAddClient({ popup, handleClose }) {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Nom"
+                label="Nom & Prénom"
                 required
-                name="nom"
+                name="fullName"
                 size="small"
                 onChange={handleChange}
-                value={Client.nom}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Prénom"
-                name="prenom"
-                size="small"
-                required
-                onChange={handleChange}
-                value={Client.prenom}
+                value={Client.fullName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -86,11 +80,14 @@ function ModalAddClient({ popup, handleClose }) {
                 label="N° Téléphone"
                 name="numTelephone"
                 size="small"
-                required
                 onChange={handleChange}
                 value={Client.numTelephone}
                 error={ErrorPhone}
-                helperText={ErrorPhone ? "Numéro telephone  déja existe" : ""}
+                helperText={
+                  ErrorPhone
+                    ? "Numéro de téléphone doit être de 8 chiffres "
+                    : ""
+                }
               />
             </Grid>{" "}
             <Grid item xs={12} sm={6}>
@@ -100,7 +97,6 @@ function ModalAddClient({ popup, handleClose }) {
                 label="Email"
                 name="email"
                 size="small"
-                required
                 onChange={handleChange}
                 value={Client.email}
                 error={ErrorEmail}
@@ -119,18 +115,6 @@ function ModalAddClient({ popup, handleClose }) {
                 value={Client.pays}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                type="text"
-                label="Envoie"
-                name="envoie"
-                size="small"
-                required
-                onChange={handleChange}
-                value={Client.envoie}
-              />
-            </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
                 fullWidth
@@ -140,7 +124,6 @@ function ModalAddClient({ popup, handleClose }) {
                 label="Note"
                 name="note"
                 size="small"
-                required
                 onChange={handleChange}
                 value={Client.note}
               />
