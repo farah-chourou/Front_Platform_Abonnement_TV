@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import DialogTitle from "@mui/material/DialogTitle";
 import { doMutation } from "../../../utils/mutation";
 import deviceServices from "../../../services/deviceServices";
+import servicePaiementServices from "../../../services/servicePaiementServices";
+import typeAbonnServices from "../../../services/typeAbonnServices";
 
 // eslint-disable-next-line react/prop-types
 function DeleteModal({ popup, handleClose }) {
@@ -15,10 +17,24 @@ function DeleteModal({ popup, handleClose }) {
   const { mutate } = doMutation(
     "Error message if any",
     `${other} supprimer avec succès`,
-    "deviceData",
-    (data) => deviceServices.deleteDevice(data),
+    other === "Appareil"
+      ? "deviceData"
+      : other === "Service De Paiement"
+      ? "servicePaiementData"
+      : "typeAbonnData",
+    (data) => {
+      switch (other) {
+        case "Appareil":
+          return deviceServices.deleteDevice(data);
+        case "Service De Paiement":
+          return servicePaiementServices.deleteService(data);
+        default:
+          return typeAbonnServices.deleteTypeAbon(data);
+      }
+    },
     handleClose
   );
+
   const handleSubmit = (e) => {
     e.preventDefault();
     try {

@@ -44,14 +44,14 @@ function TypeAbonnTabs() {
     open: false,
     type: "",
     value: typeAbonnData,
-    other: "Appareil",
+    other: "Type Abonnement",
   });
   const openDelete = (row) => {
     setPopup({
       open: true,
       type: "deleteDevice",
       value: row,
-      other: "Appareil",
+      other: "Type Abonnement",
     });
   };
 

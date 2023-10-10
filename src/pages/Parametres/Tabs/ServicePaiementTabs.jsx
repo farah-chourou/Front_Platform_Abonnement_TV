@@ -50,14 +50,14 @@ function ServicePaiementTabs() {
     open: false,
     type: "",
     value: DeviceData,
-    other: "Appareil",
+    other: "Service De Paiement",
   });
   const openDelete = (row) => {
     setPopup({
       open: true,
       type: "deleteDevice",
       value: row,
-      other: "Appareil",
+      other: "Service De Paiement",
     });
   };
 
