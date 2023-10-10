@@ -38,7 +38,7 @@ function ModalAddClient({ popup, handleClose }) {
     e.preventDefault();
     console.log(Client);
     try {
-      if (Client.numTelephone.length === 8 || Client.numTelephone === "0") {
+      if (Client.numTelephone.length > 7 || Client.numTelephone === "0") {
         mutate(Client);
       } else {
         setErrorPhone(true);
@@ -82,7 +82,7 @@ function ModalAddClient({ popup, handleClose }) {
                 error={ErrorPhone}
                 helperText={
                   ErrorPhone
-                    ? "Numéro de téléphone doit être de 8 chiffres "
+                    ? "Numéro de téléphone doit être de 8 chiffres au minimum "
                     : ""
                 }
               />
