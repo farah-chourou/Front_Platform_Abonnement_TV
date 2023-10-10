@@ -85,7 +85,7 @@ export default function ForgetPasswordPage() {
         >
           <CssBaseline />
 
-          {success ? (
+          {success === true ? (
             <Box
               sx={{
                 marginTop: 8,
