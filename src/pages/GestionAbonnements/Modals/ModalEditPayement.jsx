@@ -117,7 +117,7 @@ function ModalEditPayement({ popup, handleClose }) {
             Annuler
           </Button>
           <Button autoFocus variant="contained" type="submit">
-            Ajouter
+            Confirmer
           </Button>
         </DialogActions>
       </form>

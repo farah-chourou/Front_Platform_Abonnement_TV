@@ -44,8 +44,7 @@ import { fDate } from "../../utils/formatTime";
 import Loading from "../../layouts/loading/Loading";
 import { UserContext } from "../../store/Contexts";
 import { roles } from "../../custom/roles";
-import { doMutation } from "../../utils/mutation";
-import servicePaiementServices from "../../services/servicePaiementServices";
+import ModalConfirmEdit from "./Modals/ModalConfirmEdit";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -117,6 +116,9 @@ function index() {
   const openUpdate = (row) => {
     setPopup({ open: true, type: "update", value: row });
   };
+  const openConfirmUpdatPai = (item) => {
+    setPopup({ open: true, type: "editPai", value: item });
+  };
 
   const openShow = (id) => {
     navigate(`/app/gestion_abonnements/details/${id}`);
@@ -156,35 +158,6 @@ function index() {
     }
     return true;
   });
-
-  const { mutate } = doMutation(
-    "Error message if any",
-    "Paiement modifier avec succès",
-    "abonnData",
-    (data) => abonnServices.update(data),
-    handleClose
-  );
-  const [Paiement, setPaiement] = useState({
-    etatPaiement: "",
-  });
-  const updatePaied = async (item) => {
-    try {
-      let updatedPaiement = null;
-
-      if (item.etatPaiement === "PAIED") {
-        updatedPaiement = { ...Paiement, etatPaiement: "NOT_PAIED" };
-      } else {
-        updatedPaiement = { ...Paiement, etatPaiement: "PAIED" };
-      }
-
-      await setPaiement(updatedPaiement);
-
-      const d = { _id: item._id, d: updatedPaiement };
-      mutate(d);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // pagination
   const handleChangePage = (event, newPage) => {
@@ -315,9 +288,9 @@ function index() {
                     <TableCell>
                       {" "}
                       <Link
-                        to={`/app/gestion_clients/details/${item?.clientID._id}`}
+                        to={`/app/gestion_clients/details/${item?.clientID?._id}`}
                       >
-                        {item.clientID?.fullName}
+                        {item?.clientID?.fullName}
                       </Link>{" "}
                     </TableCell>
                     <TableCell>{item.application}</TableCell>
@@ -337,7 +310,7 @@ function index() {
                           </Tooltip>
                           <Tooltip title="Modifier Paiement">
                             <IconButton
-                              onClick={() => updatePaied(item)}
+                              onClick={() => openConfirmUpdatPai(item)}
                               color="primary"
                             >
                               <RequestQuoteIcon />
@@ -353,11 +326,18 @@ function index() {
                           </Tooltip> */}
                         </>
                       ) : (
-                        ""
+                        <Tooltip title="Modifier Paiement">
+                          <IconButton
+                            onClick={() => openConfirmUpdatPai(item)}
+                            color="primary"
+                          >
+                            <RequestQuoteIcon />
+                          </IconButton>
+                        </Tooltip>
                       )}
                       <Tooltip title="Voir Détails">
                         <IconButton
-                          onClick={() => openShow(item._id)}
+                          onClick={() => openShow(item?._id)}
                           color="primary"
                         >
                           <VisibilityIcon />
@@ -399,6 +379,9 @@ function index() {
       )}
       {popup.type === "update" && (
         <ModalEditDeveloper popup={popup} handleClose={handleClose} />
+      )}
+      {popup.type === "editPai" && (
+        <ModalConfirmEdit popup={popup} handleClose={handleClose} />
       )}
     </Container>
   );

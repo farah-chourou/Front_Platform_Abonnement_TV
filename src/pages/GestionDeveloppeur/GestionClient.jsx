@@ -136,10 +136,12 @@ function GestionClient() {
       return item?.email?.toLowerCase().includes(searchText.toLowerCase());
     }
     if (filterValue === "numTelephone") {
-      return item?.numTelephone
-        ?.toLowerCase()
+      const numTelephoneAsString = String(item?.numTelephone);
+      return numTelephoneAsString
+        .toLowerCase()
         .includes(searchText.toLowerCase());
     }
+
     if (filterValue === "pays") {
       return item?.pays?.toLowerCase().includes(searchText.toLowerCase());
     }

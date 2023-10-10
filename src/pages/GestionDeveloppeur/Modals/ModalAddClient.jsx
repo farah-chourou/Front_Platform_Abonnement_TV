@@ -38,10 +38,7 @@ function ModalAddClient({ popup, handleClose }) {
     e.preventDefault();
     console.log(Client);
     try {
-      if (
-        Client.numTelephone.length === 8 ||
-        Client.numTelephone.length === 0
-      ) {
+      if (Client.numTelephone.length === 8 || Client.numTelephone === "0") {
         mutate(Client);
       } else {
         setErrorPhone(true);
