@@ -15,7 +15,7 @@ function ModalAddClient({ popup, handleClose }) {
   const [Client, setClient] = useState({
     fullName: "",
     email: "",
-    numTelephone: 0,
+    numTelephone: "",
     pays: "",
     note: "",
   });
@@ -39,7 +39,7 @@ function ModalAddClient({ popup, handleClose }) {
     console.log(Client);
     try {
       setErrorPhone(false);
-      if (Client.numTelephone.length > 7 || Client.numTelephone === "0") {
+      if (Client.numTelephone === "" || Client.numTelephone.length > 7) {
         mutate(Client);
       } else {
         setErrorPhone(true);

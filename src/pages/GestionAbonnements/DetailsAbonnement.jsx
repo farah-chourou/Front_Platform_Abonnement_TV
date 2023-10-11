@@ -170,6 +170,8 @@ function DetailsAbonnement() {
                     <ImageIcon />
                   </IconButton>{" "}
                 </td>
+              ) : abonnData?.files.length === 0 ? (
+                ""
               ) : (
                 <td>
                   {" "}
