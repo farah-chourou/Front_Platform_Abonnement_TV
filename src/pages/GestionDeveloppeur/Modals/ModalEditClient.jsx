@@ -38,11 +38,6 @@ function ModalEditClient({ popup, handleClose }) {
       mutateEdit(d);
     } catch (error) {
       console.log(error);
-      if (error.response.data.message === "Email already exists") {
-        setErrorEmail(true);
-      } else if (error.response.data.message === "phoneNumber already exists") {
-        setErrorPhone(true);
-      }
     }
   };
 

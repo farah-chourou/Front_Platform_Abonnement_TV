@@ -38,6 +38,7 @@ function ModalAddClient({ popup, handleClose }) {
     e.preventDefault();
     console.log(Client);
     try {
+      setErrorPhone(false);
       if (Client.numTelephone.length > 7 || Client.numTelephone === "0") {
         mutate(Client);
       } else {
@@ -45,11 +46,6 @@ function ModalAddClient({ popup, handleClose }) {
       }
     } catch (error) {
       console.log(error);
-      if (error.response.data.message === "Email already exists") {
-        setErrorEmail(true);
-      } else if (error.response.data.message === "phoneNumber already exists") {
-        setErrorPhone(true);
-      }
     }
   };
   return (
